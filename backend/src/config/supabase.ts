@@ -1,6 +1,7 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 let supabaseClient: SupabaseClient | null = null;
+let initialized = false;
 
 /**
  * Get or initialize the Supabase client.
@@ -8,9 +9,11 @@ let supabaseClient: SupabaseClient | null = null;
  * This allows the app to start even without Supabase credentials.
  */
 export function getSupabaseClient(): SupabaseClient | null {
-  if (supabaseClient) {
+  if (initialized) {
     return supabaseClient;
   }
+
+  initialized = true;
 
   const supabaseUrl = process.env.SUPABASE_URL;
   const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
@@ -34,7 +37,6 @@ export function getSupabaseClient(): SupabaseClient | null {
 }
 
 /**
- * Default export for backward compatibility.
- * Returns the client or null if not initialized.
+ * Alias for backward compatibility
  */
-export default getSupabaseClient();
+export const supabase = getSupabaseClient;
